@@ -1,42 +1,243 @@
+:root {
+  --cor-texto: #fefee3;
+  --cor-botao: #9E9F50;
+  --cor-botao-sec: #46543A;
+  --cor-destaque: #DCE37F;
+  --cor-sucesso: #52b788;
+}
+
+body,
+html,
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+.app {
+  background: linear-gradient(160deg, #2F362D, #7E8E45, #9E9F50);
+  background-size: 200% 200%;
+  animation: moverGradiente 18s ease infinite;
+  color: #FFFCEB;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  font-family: 'Poppins', sans-serif;
+  /* padding: 1.5rem 1rem; */
+  position: relative;
+  overflow: hidden;
+}
+
+@keyframes moverGradiente {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.header {
   text-align: center;
+  margin-top: 0.5rem;
+  margin-bottom: 1.2rem;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.modo select {
+  background: rgba(40, 50, 30, 0.6);
+  color: var(--cor-destaque);
+  border: 1px solid #9E9F50;
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
 }
 
-@keyframes logo-spin {
+.time {
+  text-align: center;
+  flex: 1;
+  /* força largura igual entre times */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+h1 {
+  color: #FFFCEB;
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+h2 {
+  color: #F1EFB4;
+}
+
+.pontos {
+  font-size: 5rem;
+  margin: 0.5rem 0;
+  transition: transform 0.2s ease;
+  text-align: center;
+  line-height: 1;
+  min-width: 80px;
+  /* força largura igual, centralizando visualmente */
+}
+
+.separador {
+  font-size: 3rem;
+  font-weight: bold;
+  opacity: 0.7;
+  margin: 0 1rem;
+  text-align: center;
+  width: 40px;
+}
+
+.pontos.animar {
+  transform: scale(1.25);
+}
+
+.botoes {
+  display: flex;
+  flex-direction: row;
+  /* força a disposição lado a lado */
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  /* distância entre os botões */
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 500px) {
+  .botoes {
+    gap: 0.5rem;
+  }
+
+  .botoes button {
+    width: 55px;
+    height: 55px;
+  }
+}
+
+.botoes button {
+  background: #D6D97A;
+  color: #2F362D;
+  border: none;
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease;
+}
+
+.botoes button:active {
+  background: #F3F4AA;
+  transform: scale(0.9);
+}
+
+.botoes button svg {
+  color: #2F362D;
+  width: 1.6em;
+  height: 1.6em;
+}
+
+.reset {
+  background: #3F462E;
+  color: #F1EFB4;
+  border: 1px solid #BFC47C;
+  padding: 0.8rem 2rem;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  margin-top: 1.5rem;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
+}
+
+.reset:hover {
+  background: #50593A;
+}
+
+.mensagem {
+  background: var(--cor-sucesso);
+  color: #fff;
+  padding: 0.8rem 1.5rem;
+  border-radius: 10px;
+  margin: 1rem 0;
+  font-weight: bold;
+  animation: aparecer 0.5s ease;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes aparecer {
   from {
-    transform: rotate(0deg);
+    opacity: 0;
+    transform: scale(0.9);
   }
+
   to {
-    transform: rotate(360deg);
+    opacity: 1;
+    transform: scale(1);
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.placar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-around;
+  width: 100%;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
-.card {
-  padding: 2em;
+.sets {
+  font-size: 1rem;
+  margin-top: 0.3rem;
+  color: var(--cor-destaque);
 }
 
-.read-the-docs {
-  color: #888;
+/* Mascotes */
+.mascotes-fundo {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.mascote {
+  position: absolute;
+  opacity: 0.25;
+  max-width: 260px;
+}
+
+.mascote1 {
+  top: 140px;
+  left: 20%;
+}
+
+.mascote2 {
+  bottom: 10px;
+  left: -10px;
+}
+
+.mascote3 {
+  bottom: 10px;
+  right: -10px;
+}
+
+.app::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top center, rgba(255, 255, 255, 0.06), rgba(0, 0, 0, 0.2));
+  z-index: 0;
+}
+
+.app>*:not(.mascotes-fundo) {
+  position: relative;
+  z-index: 2;
 }
