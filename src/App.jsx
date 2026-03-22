@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import { FaPlus, FaMinus } from "react-icons/fa";
-import mascote1 from "./assets/mascote1.png"; // chimarrão
-import mascote2 from "./assets/mascote2.png"; // esquerda
-import mascote3 from "./assets/mascote3.png"; // direita
+import mascote1 from "./assets/mascote1.png";
+import mascote2 from "./assets/mascote2.png";
+import mascote3 from "./assets/mascote3.png";
 
 function App() {
   const [placarA, setPlacarA] = useState(0);
@@ -14,9 +14,8 @@ function App() {
   const [animandoA, setAnimandoA] = useState(false);
   const [animandoB, setAnimandoB] = useState(false);
   const [mensagem, setMensagem] = useState("");
-  const [bloqueado, setBloqueado] = useState(false); // NOVO: bloqueia cliques pós-set
+  const [bloqueado, setBloqueado] = useState(false);
 
-  // === carregar do localStorage ===
   useEffect(() => {
     const dados = JSON.parse(localStorage.getItem("placarVolei"));
     if (dados) {
@@ -28,7 +27,6 @@ function App() {
     }
   }, []);
 
-  // === salvar no localStorage ===
   useEffect(() => {
     localStorage.setItem(
       "placarVolei",
@@ -40,16 +38,14 @@ function App() {
   const setAtual = setsA + setsB + 1;
   const pontosParaVencer = setAtual === melhorDe ? 15 : 25;
 
-  // === animação e vibração ===
   const animar = (setFunc) => {
     setFunc(true);
     setTimeout(() => setFunc(false), 300);
     if ("vibrate" in navigator) navigator.vibrate(80);
   };
 
-  // === marcar ponto ===
   const marcarPonto = (time) => {
-    if (mensagem || bloqueado) return; // NOVO: trava ao finalizar set
+    if (mensagem || bloqueado) return;
     if (time === "A") {
       const novo = placarA + 1;
       setPlacarA(novo);
@@ -64,12 +60,11 @@ function App() {
   };
 
   const retirarPonto = (time) => {
-    if (mensagem || bloqueado) return; // NOVO
+    if (mensagem || bloqueado) return;
     if (time === "A") setPlacarA(Math.max(0, placarA - 1));
     else setPlacarB(Math.max(0, placarB - 1));
   };
 
-  // === verificar vencedor de set ===
   const verificarVencedorSet = (a, b, ultimo) => {
     const diff = Math.abs(a - b);
     if (a >= pontosParaVencer && a > b && diff >= 2) {
@@ -82,19 +77,18 @@ function App() {
   };
 
   const encerrarSet = (vencedor) => {
-    setBloqueado(true); // NOVO: impede interações
+    setBloqueado(true);
     setTimeout(() => {
       setPlacarA(0);
       setPlacarB(0);
-      setBloqueado(false); // NOVO: libera após delay
+      setBloqueado(false);
 
-      // verificar se o jogo terminou
       if (setsA + 1 === setsParaVencer && vencedor === "A") {
-        setMensagem("🏆 Time A venceu o jogo!");
+        setMensagem("TIME A CAMPEÃO!");
       } else if (setsB + 1 === setsParaVencer && vencedor === "B") {
-        setMensagem("🏆 Time B venceu o jogo!");
+        setMensagem("TIME B CAMPEÃO!");
       }
-    }, 2000); // NOVO: delay de 2 segundos
+    }, 2000);
   };
 
   const resetarPlacar = () => {
@@ -106,26 +100,45 @@ function App() {
     setBloqueado(false);
   };
 
+  const renderSetsBadges = (setsWin, totalSets) => {
+    const badges = [];
+    for (let i = 1; i <= totalSets; i++) {
+      badges.push(
+        <span
+          key={i}
+          className={`set-badge ${i <= setsWin ? "won" : ""}`}
+        >
+          {i <= setsWin ? "✓" : i}
+        </span>
+      );
+    }
+    return badges;
+  };
+
   return (
     <main className="app">
       <div className="mascotes-fundo">
-        <img src={mascote1} alt="Mascote chimarrão" className="mascote mascote1" />
-        <img src={mascote2} alt="Mascote esquerda" className="mascote mascote2" />
-        <img src={mascote3} alt="Mascote direita" className="mascote mascote3" />
+        <img src={mascote1} alt="Mascote" className="mascote mascote1" />
+        <img src={mascote2} alt="Mascote" className="mascote mascote2" />
+        <img src={mascote3} alt="Mascote" className="mascote mascote3" />
       </div>
 
       <header className="header">
-        <h1>🏐 Placar de Vôlei</h1>
-
-        <div className="modo">
-          <span>Modo:</span>
-          <select
-            value={melhorDe}
-            onChange={(e) => setMelhorDe(Number(e.target.value))}
-          >
-            <option value={3}>Melhor de 3</option>
-            <option value={5}>Melhor de 5</option>
-          </select>
+        <h1>PLACAR DE VÔLEI</h1>
+        <div className="header-meta">
+          <div className="set-indicator">
+            Set <span className="set-number">{setAtual}</span> de {melhorDe}
+          </div>
+          <div className="modo">
+            <span>Melhor de:</span>
+            <select
+              value={melhorDe}
+              onChange={(e) => setMelhorDe(Number(e.target.value))}
+            >
+              <option value={3}>3</option>
+              <option value={5}>5</option>
+            </select>
+          </div>
         </div>
       </header>
 
@@ -141,10 +154,18 @@ function App() {
               <FaMinus />
             </button>
           </div>
-          <p className="sets">Sets: {setsA}</p>
+          <div className="sets-container">
+            <span className="sets-label">Sets</span>
+            <div className="sets-badges">
+              {renderSetsBadges(setsA, setsParaVencer)}
+            </div>
+          </div>
         </div>
 
-        <div className="separador">x</div>
+        <div className="separador">
+          VS
+          <span>Placar</span>
+        </div>
 
         <div className="time">
           <h2>Time B</h2>
@@ -157,7 +178,12 @@ function App() {
               <FaMinus />
             </button>
           </div>
-          <p className="sets">Sets: {setsB}</p>
+          <div className="sets-container">
+            <span className="sets-label">Sets</span>
+            <div className="sets-badges">
+              {renderSetsBadges(setsB, setsParaVencer)}
+            </div>
+          </div>
         </div>
       </section>
 
